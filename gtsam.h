@@ -969,9 +969,10 @@ virtual class SimpleCamera {
 // Some typedefs for common camera types
 // PinholeCameraCal3_S2 is the same as SimpleCamera above
 typedef gtsam::PinholeCamera<gtsam::Cal3_S2> PinholeCameraCal3_S2;
-typedef gtsam::PinholeCamera<gtsam::Cal3DS2> PinholeCameraCal3DS2;
-typedef gtsam::PinholeCamera<gtsam::Cal3Unified> PinholeCameraCal3Unified;
-typedef gtsam::PinholeCamera<gtsam::Cal3Bundler> PinholeCameraCal3Bundler;
+// due to lack of jacobians of Cal3DS2_Base::calibrate, PinholeCamera does not apply to Cal3DS2/Unified
+//typedef gtsam::PinholeCamera<gtsam::Cal3DS2> PinholeCameraCal3DS2;
+//typedef gtsam::PinholeCamera<gtsam::Cal3Unified> PinholeCameraCal3Unified;
+//typedef gtsam::PinholeCamera<gtsam::Cal3Bundler> PinholeCameraCal3Bundler;
 
 #include <gtsam/geometry/StereoCamera.h>
 class StereoCamera {
@@ -2337,7 +2338,8 @@ virtual class GeneralSFMFactor : gtsam::NoiseModelFactor {
   gtsam::Point2 measured() const;
 };
 typedef gtsam::GeneralSFMFactor<gtsam::SimpleCamera, gtsam::Point3> GeneralSFMFactorCal3_S2;
-typedef gtsam::GeneralSFMFactor<gtsam::PinholeCameraCal3DS2, gtsam::Point3> GeneralSFMFactorCal3DS2;
+// due to lack of jacobians of Cal3DS2_Base::calibrate, GeneralSFMFactor does not apply to Cal3DS2
+//typedef gtsam::GeneralSFMFactor<gtsam::PinholeCameraCal3DS2, gtsam::Point3> GeneralSFMFactorCal3DS2;
 
 template<CALIBRATION = {gtsam::Cal3_S2}>
 virtual class GeneralSFMFactor2 : gtsam::NoiseModelFactor {
@@ -2694,4 +2696,29 @@ class RedirectCout {
   string str();
 };
 
-}
+namespace da {
+#include <gtsam/slam/da.h>
+template<POSE, POINT, BEARING, RANGE>
+class JCBB {
+  JCBB(const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values, double prob);
+
+  void add(BEARING measureBearing, RANGE measuredRange, const gtsam::noiseModel::Base *model);
+  gtsam::KeyVector match() const;
+};
+
+template<POSE, POINT, BEARING, RANGE>
+class MHJCBB {
+  MHJCBB(int max_tracks, double prob, double posterior_pose_md_threshold);
+
+  void initialize(const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values);
+  void add(BEARING measureBearing, RANGE measuredRange, const gtsam::noiseModel::Base *model);
+  void match();
+  int size() const;
+  pair<int, gtsam::KeyVector> get(int i) const;
+};
+
+typedef gtsam::da::JCBB<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> JCBB2;
+typedef gtsam::da::MHJCBB<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> MHJCBB2;
+} //\namespace da
+
+} // namespace gtsam
