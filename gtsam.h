@@ -2742,7 +2742,7 @@ namespace da {
 #include <gtsam/slam/da.h>
 template<POSE, POINT, BEARING, RANGE>
 class JCBB {
-  JCBB(const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values, double prob);
+  JCBB(const gtsam::ISAM2 &isam2, double prob);
 
   void add(BEARING measureBearing, RANGE measuredRange, const gtsam::noiseModel::Base *model);
   gtsam::KeyVector match() const;
@@ -2752,7 +2752,7 @@ template<POSE, POINT, BEARING, RANGE>
 class MHJCBB {
   MHJCBB(int max_tracks, double prob, double posterior_pose_md_threshold);
 
-  void initialize(const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values);
+  void initialize(const gtsam::ISAM2 &isam2);
   void add(BEARING measureBearing, RANGE measuredRange, const gtsam::noiseModel::Base *model);
   void match();
   int size() const;
@@ -2762,5 +2762,12 @@ class MHJCBB {
 typedef gtsam::da::JCBB<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> JCBB2;
 typedef gtsam::da::MHJCBB<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> MHJCBB2;
 } //\namespace da
+
+#include <gtsam/nonlinear/FastMarginals.h>
+class FastMarginals {
+  FastMarginals(const gtsam::ISAM2 &isam2);
+  Matrix marginalCovariance(const size_t &variable);
+  Matrix jointMarginalCovariance(const gtsam::KeyVector &variables);
+};
 
 } // namespace gtsam
