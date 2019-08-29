@@ -2208,6 +2208,10 @@ class ISAM2 {
   gtsam::ISAM2Params params() const;
 };
 
+#include <gtsam/nonlinear/ISAM2_serialization.h>
+string serializeISAM2(const gtsam::ISAM2 &isam2);
+gtsam::ISAM2 deserializeISAM2(const string &buffer);
+
 #include <gtsam/nonlinear/NonlinearISAM.h>
 class NonlinearISAM {
   NonlinearISAM();
