@@ -2209,6 +2209,10 @@ class ISAM2 {
 };
 
 #include <gtsam/nonlinear/ISAM2_serialization.h>
+string serializeNonlinearFactorGraph(const gtsam::NonlinearFactorGraph &graph);
+gtsam::NonlinearFactorGraph deserializeNonlinearFactorGraph(const string &buffer);
+string serializeValues(const gtsam::Values &values);
+gtsam::Values deserializeValues(const string &buffer);
 string serializeISAM2(const gtsam::ISAM2 &isam2);
 gtsam::ISAM2 deserializeISAM2(const string &buffer);
 

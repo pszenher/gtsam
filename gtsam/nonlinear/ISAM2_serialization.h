@@ -3,15 +3,15 @@
 #include <gtsam/base/serialization.h>
 #include <gtsam/geometry/Pose2.h>
 #include <gtsam/geometry/Pose3.h>
-#include <gtsam/linear/NoiseModel.h>
-#include <gtsam/linear/JacobianFactor.h>
-#include <gtsam/linear/HessianFactor.h>
 #include <gtsam/linear/GaussianISAM.h>
-#include <gtsam/slam/BetweenFactor.h>
-#include <gtsam/slam/PriorFactor.h>
+#include <gtsam/linear/HessianFactor.h>
+#include <gtsam/linear/JacobianFactor.h>
+#include <gtsam/linear/NoiseModel.h>
+#include <gtsam/nonlinear/ISAM2.h>
 #include <gtsam/nonlinear/NonlinearFactorGraph.h>
 #include <gtsam/nonlinear/Values.h>
-#include <gtsam/nonlinear/ISAM2.h>
+#include <gtsam/slam/BetweenFactor.h>
+#include <gtsam/slam/PriorFactor.h>
 
 using namespace gtsam;
 
@@ -36,19 +36,44 @@ BOOST_CLASS_EXPORT_GUID(noiseModel::Robust, "gtsam_noiseModel_Robust");
 BOOST_CLASS_EXPORT_GUID(SharedNoiseModel, "gtsam_SharedNoiseModel");
 BOOST_CLASS_EXPORT_GUID(SharedDiagonal, "gtsam_SharedDiagonal");
 BOOST_CLASS_EXPORT_GUID(JacobianFactor, "gtsam_JacobianFactor");
-BOOST_CLASS_EXPORT_GUID(HessianFactor , "gtsam_HessianFactor");
-BOOST_CLASS_EXPORT_GUID(GaussianConditional , "gtsam_GaussianConditional");
+BOOST_CLASS_EXPORT_GUID(HessianFactor, "gtsam_HessianFactor");
+BOOST_CLASS_EXPORT_GUID(GaussianConditional, "gtsam_GaussianConditional");
 
-namespace gtsam {
-
-std::string serializeISAM2(const ISAM2 &isam2) {
-    return serializeBinary(isam2);
+namespace gtsam
+{
+std::string serializeValues(const Values &values)
+{
+  return serializeBinary(values);
 }
 
-ISAM2 deserializeISAM2(const std::string &buffer) {
-    ISAM2 isam2;
-    deserializeBinary(buffer, isam2);
-    return isam2;
+Values deserializeValues(const std::string &buffer)
+{
+  Values values;
+  deserializeBinary(buffer, values);
+  return values;
 }
 
+std::string serializeNonlinearFactorGraph(const NonlinearFactorGraph &graph)
+{
+  return serializeBinary(graph);
+}
+
+NonlinearFactorGraph deserializeNonlinearFactorGraph(const std::string &buffer)
+{
+  NonlinearFactorGraph graph;
+  deserializeBinary(buffer, graph);
+  return graph;
+}
+
+std::string serializeISAM2(const ISAM2 &isam2)
+{
+  return serializeBinary(isam2);
+}
+
+ISAM2 deserializeISAM2(const std::string &buffer)
+{
+  ISAM2 isam2;
+  deserializeBinary(buffer, isam2);
+  return isam2;
+}
 }
