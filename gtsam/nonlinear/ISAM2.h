@@ -109,6 +109,8 @@ class GTSAM_EXPORT ISAM2 : public BayesTree<ISAM2Clique> {
    * ISAM2Params) */
   ISAM2();
 
+  void disableRelinearization() { params_.enableRelinearization = false; }
+
   /** default virtual destructor */
   virtual ~ISAM2() {}
 
