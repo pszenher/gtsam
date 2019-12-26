@@ -1317,6 +1317,15 @@ virtual class Tukey: gtsam::noiseModel::mEstimator::Base {
   void serializable() const;
 };
 
+virtual class DCS: gtsam::noiseModel::mEstimator::Base {
+  DCS(double k);
+  void print(string s) const;
+  static gtsam::noiseModel::mEstimator::DCS* Create(double k);
+
+  // enabling serialization functionality
+  void serializable() const;
+};
+
 }///\namespace mEstimator
 
 virtual class Robust : gtsam::noiseModel::Base {

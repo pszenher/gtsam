@@ -12,8 +12,10 @@
 #include <gtsam/nonlinear/Values.h>
 #include <gtsam/slam/BetweenFactor.h>
 #include <gtsam/slam/PriorFactor.h>
+#include <gtsam/sam/BearingRangeFactor.h>
 
 using namespace gtsam;
+typedef gtsam::BearingRangeFactor<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> BearingRangeFactor2D;
 
 // https://bitbucket.org/gtborg/gtsam/issues/307/serialization-of-gtsam-classes-such-as
 GTSAM_VALUE_EXPORT(Pose3);
@@ -24,6 +26,7 @@ BOOST_CLASS_EXPORT_GUID(PriorFactor<Pose3>, "gtsam_PriorFactor_Pose3");
 BOOST_CLASS_EXPORT_GUID(BetweenFactor<Pose3>, "gtsam_BetweenFactor_Pose3");
 BOOST_CLASS_EXPORT_GUID(PriorFactor<Pose2>, "gtsam_PriorFactor_Pose2");
 BOOST_CLASS_EXPORT_GUID(BetweenFactor<Pose2>, "gtsam_BetweenFactor_Pose2");
+BOOST_CLASS_EXPORT_GUID(BearingRangeFactor2D, "gtsam_BearingRangeFactor2D");
 BOOST_CLASS_EXPORT_GUID(noiseModel::Constrained, "gtsam_noiseModel_Constrained");
 BOOST_CLASS_EXPORT_GUID(noiseModel::Diagonal, "gtsam_noiseModel_Diagonal");
 BOOST_CLASS_EXPORT_GUID(noiseModel::Gaussian, "gtsam_noiseModel_Gaussian");
