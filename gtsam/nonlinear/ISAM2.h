@@ -110,6 +110,8 @@ class GTSAM_EXPORT ISAM2 : public BayesTree<ISAM2Clique> {
    * ISAM2Params) */
   ISAM2();
 
+  void disableRelinearization() { params_.enableRelinearization = false; }
+
   /** default virtual destructor */
   virtual ~ISAM2() {}
 
@@ -315,6 +317,21 @@ class GTSAM_EXPORT ISAM2 : public BayesTree<ISAM2Clique> {
   void removeVariables(const KeySet& unusedKeys);
 
   void updateDelta(bool forceFullSolve = false) const;
+
+  /** Serialization function */
+  friend class boost::serialization::access;
+  template <class ARCHIVE>
+  void serialize(ARCHIVE& ar, const unsigned int /*version*/) {
+    ar& BOOST_SERIALIZATION_BASE_OBJECT_NVP(Base);
+    ar& BOOST_SERIALIZATION_NVP(theta_);
+    ar& BOOST_SERIALIZATION_NVP(delta_);
+    ar& BOOST_SERIALIZATION_NVP(deltaNewton_);
+    ar& BOOST_SERIALIZATION_NVP(deltaReplacedMask_);
+    ar& BOOST_SERIALIZATION_NVP(fixedVariables_);
+    ar& BOOST_SERIALIZATION_NVP(variableIndex_);
+    ar& BOOST_SERIALIZATION_NVP(nonlinearFactors_);
+    ar& BOOST_SERIALIZATION_NVP(linearFactors_);
+  }
 };  // ISAM2
 
 /// traits

@@ -7,6 +7,11 @@ if(NOT DEFINED CMAKE_MACOSX_RPATH)
   set(CMAKE_MACOSX_RPATH 0)
 endif()
 
+set (GTSAM_INSTALL_CYTHON_TOOLBOX ON CACHE BOOL "Enable installation of Cython toolbox")
+set (GTSAM_CYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" CACHE STRING "Install Cython toolbox to devel")
+set (GTSAM_BUILD_TESTS OFF CACHE BOOL "Disable tests")
+set (GTSAM_BUILD_EXAMPLES_ALWAYS OFF CACHE BOOL "Disable examples")
+
 # Set the version number for the library
 set (GTSAM_VERSION_MAJOR 4)
 set (GTSAM_VERSION_MINOR 0)

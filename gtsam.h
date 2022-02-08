@@ -1550,6 +1550,15 @@ virtual class L2WithDeadZone: gtsam::noiseModel::mEstimator::Base {
   double loss(double error) const;
 };
 
+virtual class DCS: gtsam::noiseModel::mEstimator::Base {
+  DCS(double k);
+  void print(string s) const;
+  static gtsam::noiseModel::mEstimator::DCS* Create(double k);
+
+  // enabling serialization functionality
+  void serializable() const;
+};
+
 }///\namespace mEstimator
 
 virtual class Robust : gtsam::noiseModel::Base {
@@ -2519,6 +2528,14 @@ class ISAM2 {
   gtsam::VariableIndex getVariableIndex() const;
   gtsam::ISAM2Params params() const;
 };
+
+#include <gtsam/nonlinear/ISAM2_serialization.h>
+string serializeNonlinearFactorGraph(const gtsam::NonlinearFactorGraph &graph);
+gtsam::NonlinearFactorGraph deserializeNonlinearFactorGraph(const string &buffer);
+string serializeValues(const gtsam::Values &values);
+gtsam::Values deserializeValues(const string &buffer);
+string serializeISAM2(const gtsam::ISAM2 &isam2);
+gtsam::ISAM2 deserializeISAM2(const string &buffer);
 
 #include <gtsam/nonlinear/NonlinearISAM.h>
 class NonlinearISAM {
